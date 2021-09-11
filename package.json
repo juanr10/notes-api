@@ -4,23 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "start": "node index.js",
-    "test": "jest --verbose"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --silent notes.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^27.1.0",
+    "jest": "27.1.0",
     "nodemon": "2.0.12",
-    "standard": "16.0.3"
+    "standard": "16.0.3",
+    "supertest": "6.1.6"
   },
   "dependencies": {
     "@sentry/node": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "express": "4.17.1",
     "mongoose": "5.9.13"

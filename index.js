@@ -3,7 +3,7 @@ const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
 const express = require('express')
 const cors = require('cors')
-const connectDB = require('./config/db')
+const { connectDB } = require('./config/db')
 // DB connection
 connectDB()
 // Model
@@ -40,12 +40,9 @@ app.get('/', (request, response) => {
   response.send('<h1>Welcome to notes API!</h1>')
 })
 
-app.get('/api/notes/', (request, response, next) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  }).catch(err => {
-    next(err)
-  })
+app.get('/api/notes/', async (request, response, next) => {
+  const notes = await Note.find({})
+  response.json(notes)
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
@@ -60,7 +57,7 @@ app.get('/api/notes/:id', (request, response, next) => {
   })
 })
 
-app.post('/api/notes', (request, response, next) => {
+app.post('/api/notes', async (request, response, next) => {
   const note = request.body
 
   if (!note.content) {
@@ -75,11 +72,12 @@ app.post('/api/notes', (request, response, next) => {
     important: typeof note.important !== 'undefined' || false
   })
 
-  newNote.save().then(savedNote => {
+  try {
+    const savedNote = await newNote.save()
     response.status(201).json(savedNote)
-  }).catch(err => {
-    next(err)
-  })
+  } catch (error) {
+    next(error)
+  }
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -98,14 +96,15 @@ app.put('/api/notes/:id', (request, response, next) => {
   })
 })
 
-app.delete('/api/notes/:id', (request, response, next) => {
+app.delete('/api/notes/:id', async (request, response, next) => {
   const { id } = request.params
 
-  Note.findByIdAndDelete(id).then(() => {
+  try {
+    await Note.findByIdAndRemove(id)
     response.status(204).end()
-  }).catch(err => {
-    next(err)
-  })
+  } catch (error) {
+    next(error)
+  }
 })
 
 // Middlewares
@@ -117,6 +116,8 @@ app.use(Sentry.Handlers.errorHandler())
 app.use(handleErrors)
 
 const PORT = process.env.PORT
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+module.exports = { app, server }

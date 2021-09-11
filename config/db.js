@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
-const connectionString = process.env.MONGO_DB_URI
+require('dotenv').config()
+
+const { MONGO_DB_URI, MONGO_DB_URI_TEST, NODE_ENV } = process.env
+const connectionString = NODE_ENV === 'test' ? MONGO_DB_URI_TEST : MONGO_DB_URI
 
 /**
  * @name:connectDB.
@@ -17,8 +20,11 @@ const connectDB = async () => {
     console.log('DB notes connected')
   } catch (error) {
     console.log(error)
-    process.exit(1)// Stops server
   }
 }
 
-module.exports = connectDB
+const disconnectDB = async () => {
+  await mongoose.connection.close()
+}
+
+module.exports = { connectDB, disconnectDB }
