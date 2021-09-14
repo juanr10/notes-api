@@ -9,6 +9,7 @@ connectDB()
 // Model
 const Note = require('./models/Note')
 // Middlewares
+const usersRouter = require('./controllers/users')
 const notFound = require('./middleware/notFound')
 const handleErrors = require('./middleware/handleErrors')
 
@@ -106,6 +107,9 @@ app.delete('/api/notes/:id', async (request, response, next) => {
     next(error)
   }
 })
+
+// Controllers
+app.use('/api/users', usersRouter)
 
 // Middlewares
 // Unknow route
