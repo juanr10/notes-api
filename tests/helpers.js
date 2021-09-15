@@ -1,3 +1,4 @@
+const User = require('../models/User')
 const supertest = require('supertest')
 const { app } = require('../index')
 const api = supertest(app)
@@ -24,4 +25,9 @@ const getNotes = async () => {
   }
 }
 
-module.exports = { initialNotes, api, getNotes }
+const getUsers = async () => {
+  const usersDB = await User.find({})
+  return usersDB.map(user => user.toJSON())
+}
+
+module.exports = { initialNotes, api, getNotes, getUsers }
