@@ -6,10 +6,7 @@ const cors = require('cors')
 const { connectDB } = require('./config/db')
 // DB connection
 connectDB()
-// Model
-const Note = require('./models/Note')
 // Middlewares
-const usersRouter = require('./controllers/users')
 const notFound = require('./middleware/notFound')
 const handleErrors = require('./middleware/handleErrors')
 
@@ -41,75 +38,9 @@ app.get('/', (request, response) => {
   response.send('<h1>Welcome to notes API!</h1>')
 })
 
-app.get('/api/notes/', async (request, response, next) => {
-  const notes = await Note.find({})
-  response.json(notes)
-})
-
-app.get('/api/notes/:id', (request, response, next) => {
-  const { id } = request.params
-
-  Note.findById(id).then(note => {
-    return note
-      ? response.json(note)
-      : response.status(404).end()
-  }).catch(err => {
-    next(err)
-  })
-})
-
-app.post('/api/notes', async (request, response, next) => {
-  const note = request.body
-
-  if (!note.content) {
-    return response.status(400).json({
-      error: 'required "content" is missing'
-    })
-  }
-
-  const newNote = new Note({
-    content: note.content,
-    date: new Date().toISOString(),
-    important: typeof note.important !== 'undefined' || false
-  })
-
-  try {
-    const savedNote = await newNote.save()
-    response.status(201).json(savedNote)
-  } catch (error) {
-    next(error)
-  }
-})
-
-app.put('/api/notes/:id', (request, response, next) => {
-  const { id } = request.params
-  const note = request.body
-
-  const noteToUpdate = {
-    content: note.content,
-    important: note.important
-  }
-
-  Note.findByIdAndUpdate(id, noteToUpdate, { new: true }).then(result => {
-    response.json(result)
-  }).catch(err => {
-    next(err)
-  })
-})
-
-app.delete('/api/notes/:id', async (request, response, next) => {
-  const { id } = request.params
-
-  try {
-    await Note.findByIdAndRemove(id)
-    response.status(204).end()
-  } catch (error) {
-    next(error)
-  }
-})
-
 // Controllers
-app.use('/api/users', usersRouter)
+app.use('/api/users', require('./routes/users'))
+app.use('/api/notes', require('./routes/notes'))
 
 // Middlewares
 // Unknow route
