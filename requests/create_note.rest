@@ -3,7 +3,8 @@ content-type: application/json
 
 {
     "content" : "This is a new note",
-    "important": true
+    "important": true,
+    "userId": "614e558d48556340b81309fa"
 }
 
 ###

@@ -18,6 +18,13 @@ describe('creating a new user', () => {
     await user.save()
   })
 
+  test('users are returned as json', async () => {
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
   test('works as expected creating a fresh username', async () => {
     const usersAtStart = await getUsers()
 

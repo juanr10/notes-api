@@ -2,6 +2,8 @@ const usersRouter = require('express').Router()
 const usersController = require('../controllers/userController')
 const { check } = require('express-validator')
 
+usersRouter.get('/', usersController.getAll)
+
 usersRouter.post('/',
   [
     check('username', 'Username is required').not().isEmpty(),
