@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/notes HTTP/1.1
 content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZTU1OGQ0ODU1NjM0MGI4MTMwOWZhIiwidXNlcm5hbWUiOiJqdWFucjEwIn0sImlhdCI6MTYzNTYzOTQzNCwiZXhwIjoxNjM1NjQzMDM0fQ.f5IaLBUmMMCUFeWRWOn12KjOs05gY9GU6Fr2CBPp9Tw
 
 {
-    "content" : "This is a new note",
-    "important": true,
-    "userId": "614e558d48556340b81309fa"
+    "content" : "This is a new note with token",
+    "important": true
 }
 
 ###
@@ -21,6 +21,7 @@ content-type: application/json
 
 POST http://localhost:3001/api/notes HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZTU1OGQ0ODU1NjM0MGI4MTMwOWZhIiwidXNlcm5hbWUiOiJqdWFucjEwIn0sImlhdCI6MTYzNTYyMDkwMywiZXhwIjoxNjM1NjI0NTAzfQ.xTatrV023qcNaNcwkAmRjuoidcHWJrWhPdAFuAaFU1Q
 
 {
     #This not work. 

@@ -29,9 +29,11 @@ exports.create = async (request, response, next) => {
     return response.status(400).json({ errors: errors.array() })
   }
 
-  const { content, important = false, userId } = request.body
+  const { id } = request.user
 
-  const user = await User.findById(userId)
+  const { content, important = false } = request.body
+
+  const user = await User.findById(id)
 
   const newNote = new Note({
     content,
